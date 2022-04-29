@@ -1,17 +1,23 @@
 //CONTROLLER
 
-// app.get('api/v1/tasks') 	      - get all the tasks
-// app.post('api/v1/tasks')	      - create a new task
-// app.get('api/v1/tasks/:id')	  - get a single task
-// app.patch('api/v1/tasks/:id')  - update task
-// app.delete('api/v1/tasks/:id') - delete task
+const Task = require('../models/Task')
 
-const getAllTasks = (req, res) => {
-  res.send('<h2>GET all tasks</h2>')
+const getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({})
+    res.status(200).send({ tasks })
+  } catch (error) {
+    res.status(500).json({ msg: error })
+  }
 }
 
-const createTask = (req, res)=> {
-  res.json(req.body)
+const createTask = async (req, res) => {
+  try {
+    const task = await Task.create(req.body);
+    res.status(201).json({ task });
+  } catch (error) {
+    res.status(500).json({ msg: error })
+  }
 }
 
 const getTask = (req, res)=> {
@@ -33,3 +39,9 @@ module.exports = {
   updateTask,
   deleteTask
 }
+
+// app.get('api/v1/tasks') 	      - get all the tasks
+// app.post('api/v1/tasks')	      - create a new task
+// app.get('api/v1/tasks/:id')	  - get a single task
+// app.patch('api/v1/tasks/:id')  - update task
+// app.delete('api/v1/tasks/:id') - delete task
